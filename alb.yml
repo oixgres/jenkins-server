@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: alb
+  namespace: jenkins
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+spec:
+  type: LoadBalancer
+  sessionAffinity: None
+  selector:
+    app: jenkins-server
+  ports:
+  - protocol: TCP
+    name: http-api
+    port: 80
+    targetPort: 8080
+  - protocol: TCP
+    name: https-api
+    port: 443
+    targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-nlp
+  namespace: jenkins
+spec:
+  type: ClusterIP
+  selector:
+    app: jenkins-server
+  ports:
+  - port: 50000
+    targetPort: 50000
