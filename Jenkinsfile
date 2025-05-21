@@ -1,5 +1,8 @@
 pipeline{
     agent any
+    environment{
+        DOCKER_PWD = credentials('dockerhub')
+    }
     stages{
         stage('Build'){
             steps{                    
@@ -9,12 +12,9 @@ pipeline{
                 }
             }
         stage('Publish'){
-            steps{ 
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PWD', usernameVariable: 'USR')]){
-                    sh 'docker login --username ${USR} -p $PWD'
-                    sh 'docker push "oixgres/utils:jenkins"'
-                }
-
+            steps{
+                sh 'echo $DOCKER_PWD | docker login --username oixgres --password-stdin'
+                sh 'docker push "oixgres/utils:jenkins"'
             }
         }
     }

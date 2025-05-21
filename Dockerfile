@@ -2,6 +2,12 @@ FROM jenkins/jenkins:lts
 
 USER root
 
+# Install plugins
+ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
+
+COPY --chown=jenkins:jenkins plugins.txt /usr/share/jenkins/ref/plugins.txt
+RUN jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt
+
 # Add docker
 RUN apt-get update -y && \
     apt-get install -y ca-certificates curl
@@ -18,6 +24,6 @@ RUN echo \
 RUN apt-get update -y && \
     apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-# aws cli
+# Add aws cli
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 RUN unzip awscliv2.zip && ./aws/install
