@@ -25,9 +25,9 @@ spec:
       containers:
       - name: jenkins-server
         image: oixgres/utils:jenkins
-        # activate to modify pod if required
-        # securityContext:
-          # privileged: True 
+        # activate to start dockerd
+        securityContext:
+          privileged: True 
         imagePullPolicy: Always
         resources:
           limits:

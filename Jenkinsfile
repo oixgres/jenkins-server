@@ -10,8 +10,8 @@ pipeline{
             }
         stage('Publish'){
             steps{ 
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PDW', usernameVariable: 'USR')]){
-                    sh 'echo ${PSWD} | docker login --username ${USR} --password-stdin'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PWD', usernameVariable: 'USR')]){
+                    sh 'docker login --username ${USR} -p $PWD'
                     sh 'docker push "oixgres/utils:jenkins"'
                 }
 
